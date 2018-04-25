@@ -13,3 +13,16 @@ function cashTotal (x) {
 }    
 console.log("No way! You are short $" + String(cashTotal(total - bank_balance)));
 }
+
+
+
+
+// dog age calculator
+var dogAge = prompt("How old is your dog?"),
+ageCalc = dogAge * 7;
+
+function calculateDogAge(age) {
+	var result = ("Your doggie is " + age + " years old in dog years!");
+	console.log(result);
+}
+calculateDogAge(ageCalc);
