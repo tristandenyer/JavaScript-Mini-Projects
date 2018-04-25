@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Calculate New Image Size While Keeping Aspect Ratio</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            body, p {
+            font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
+            }
+
+            body {
+            background: #3AAFAB;
+            color: #fff;
+            padding: 50px 0;
+            }
+
+            .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+            }
+
+            .container * {
+            box-sizing: border-box;
+            }
+
+            .flex-outer {
+            list-style-type: none;
+            padding: 0;
+            }
+
+            .flex-outer {
+            max-width: 800px;
+            margin: 0 auto;
+            }
+
+            .flex-outer li {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            }
+
+            .flex-outer > li:not(:last-child) {
+            margin-bottom: 20px;
+            }
+
+            .flex-outer li label,
+            .flex-outer li button,
+            p {
+            padding: 8px;
+            font-weight: 300;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            }
+
+            .flex-outer > li > label {
+            flex: 1 0 120px;
+            max-width: 220px;
+            }
+
+            .flex-outer > li > label + * {
+            flex: 1 0 220px;
+            }
+
+            .flex-outer li input,
+            .flex-outer li textarea {
+            padding: 15px;
+            border: none;
+            background-color: rgba(255,255,255, .5);
+            }
+
+            .flex-outer li input:focus,
+            .flex-outer li textarea:focus {
+                background-color: rgba(255,255,255, 1);
+            }
+
+            .flex-outer li button {
+            margin-left: auto;
+            padding: 8px 16px;
+            border: none;
+            background: #333;
+            color: #f2f2f2;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            border-radius: 2px;
+            font-size: 18px;
+            }
+
+            input {
+            font-size: 26px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            }
+            
+            .textCenter {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <form>
+                <ul class="flex-outer">
+                <li>
+                    <label class='nameLabel' for='originalWidth'>Original Width:</label>
+                    <input id='originalWidth' type='text'></input>
+                </li>
+                <li>
+                    <label class='nameLabel' for='originalHeight'>Original Height:</label>
+                    <input id='originalHeight' type='text'></input>
+                </li>
+                <li>
+                    <label class='nameLabel' for='newWidth'>New Width:</label>
+                    <input id='newWidth' type='text'></input>
+                </li>
+                <li>
+                    <button id='subButton' type='button'>Get new size!</button>
+                </li>
+                </ul>
+            </form>
+
+            <p id='result' class="textCenter"></p>
+        </div>     
+        
+        <script>
+            function aspectRatio() {
+                var originalWidth = document.getElementById('originalWidth').value;
+                var originalHeight = document.getElementById('originalHeight').value;
+                var newWidth = document.getElementById('newWidth').value;
+                // calculate the aspect ratio
+                var originalAspectRatio = (originalWidth / originalHeight);
+                // use the aspect ratio to find the new height
+                var newHeight = (newWidth / originalAspectRatio);
+
+                var result = document.getElementById('result');
+                
+                result.textContent = "For an aspect ratio of " + originalAspectRatio.toFixed(2) + ":1, your new size is " + newWidth + " x " + newHeight + ".";
+            }
+
+            // use an eventlistener for the event
+            var subButton = document.getElementById('subButton');
+            subButton.addEventListener('click', aspectRatio, false);
+        </script>
+    </body>
+</html>
