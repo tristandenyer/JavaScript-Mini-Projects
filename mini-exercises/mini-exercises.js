@@ -181,3 +181,51 @@ function aspectRatio(originalWidth, originalHeight, newWidth) {
 }
 
 aspectRatio(800, 600, 1000);
+
+
+
+
+
+// recipe card
+var recipe = {
+	title: "Cookies!",
+	servings: 4,
+	ingredients: ["cinnamon", "cumin", "cocoa"]
+}
+
+console.log(recipe.title);
+console.log('Servings: ' + recipe.servings);
+console.log('Ingredients:');
+for (var i = 0; i < recipe.ingredients.length; i++) {
+    console.log(recipe.ingredients[i]);
+}
+
+
+
+
+
+// reading list
+var books = [
+    {title: "Motorcycle",
+	author: "Some Lady",
+	alreadyRead: true
+    },
+    {title: "Cars",
+	author: "Some Guy",
+	alreadyRead: false
+    },
+    {title: "Cats",
+	author: "Some Dog",
+	alreadyRead: false
+    }
+
+];
+for (var i = 0; i < books.length; i++) {
+	var book = books[i];
+	var bookInfo = book.title + " by " + book.author;
+	if (book.alreadyRead) {
+		console.log("You already read " + bookInfo);
+                    } else {
+	console.log("You still need to read " + bookInfo);
+                    }
+}
