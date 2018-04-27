@@ -14,33 +14,39 @@
                 padding: 0;
             }
             html {
-                position: relative;
+                position: relative; /* TODO: not sure we need this when using position: fixed; below */
             }
             .wrapper {
-                min-height: 100%;
+                /* min-height: 100%; */
                 padding: 1rem;
             }
+
+            /* start Hadley-specific styles */
 
             #h-drawer {
                 /* make it sticky to bottom */
                 position: fixed;
                 bottom: 0px;
-                width: 100%;
-                overflow: visible;
                 z-index: 99;
 
+                /* container styles */
+                width: 100%;
                 background-color: #fff;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+
+                /* make it move smoothly */
                 transition: bottom .3s ease;
+
+                /* global content styling */
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-size: 16px;
                 font-style: normal;
                 font-variant: normal;
                 font-weight: 400;
                 line-height: 1.4;
-                border-top-left-radius: 8px;
-                border-top-right-radius: 8px;
             }
-            #h-drawer[data-open='false'] {
+            #h-drawer[data-open='false'] { /* watching for that change from 'true' */
                 bottom:-130px;
                 transition: bottom .3s ease;
             }
@@ -48,29 +54,28 @@
                 max-width: 400px;
                 margin: 0 auto;
             }
-            /* clearfix */
-            .h-body:after {
-                content: "";
-                display: table;
-                clear: both;
-            }
-            .h-body {
-                padding: 0 1.5rem 1.5rem;
-            }
-            .h-value-prop {
-                margin-bottom: 1.5rem
-            }
-            #h-click {
+            #h-header-click {
                 cursor: pointer;
                 text-align: center;
                 padding-top: .5rem;
             }
+            #h-drawer[data-open='false'] #h-header-click svg {
+                transform: rotate(180deg);
+            }
+            .h-body {
+                padding: 0 1.5rem 1.5rem;
+            }
+            .h-body:after { /* clearfix */
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .h-value-prop {
+                margin-bottom: 1.5rem
+            }
             .h-col-6 {
                 width: 50%;
                 float: left;
-            }
-            #h-drawer[data-open='false'] #h-click svg {
-                transform: rotate(180deg);
             }
             .h-hadley-logo {
                 width: 90px;
@@ -79,20 +84,23 @@
             .h-fbm-button {
                 text-align: right;
             }
-            .h-fbm-button a {
-                background-color: #0084FF;
-                padding: 10px 11px 8px 11px;
-                border-radius: 4px;
-                color: #fff;
-                font-size: 14px;
-                line-height: 1;
-                text-decoration: none;
-                display: inline-block;
-            }
             .h-fbm-icon {
                 display: inline;
                 vertical-align: sub;
                 margin-right: 5px;
+            }
+            .h-fbm-button a {
+                /* button styles */
+                background-color: #0084FF;
+                padding: 10px 11px 8px 11px;
+                border-radius: 4px;
+                display: inline-block;
+
+                /* button label styles */
+                color: #fff;
+                font-size: 14px;
+                line-height: 1;
+                text-decoration: none;
             }
         </style>
     </head>
@@ -222,7 +230,7 @@
         </div>
         <div id="h-drawer" data-open='true'>
             <div class="h-contents">
-                <div id="h-click" class="" onclick="toggleDrawer('h-click');">
+                <div id="h-header-click" class="" onclick="toggleDrawer('h-header-click');">
                     <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 905 1600 695"><path d="M1528.8 905L800 1451.6 71.2 905 0 1000l800 600 800-600"/></svg>
                 </div>
 
@@ -264,10 +272,10 @@
 
         // testing the following...
 
-        var div = document.getElementsByClassName("h-body")[0];
+        // var div = document.getElementsByClassName("h-body")[0];
 
-        console.log("Height of .h-body: ", div.offsetHeight);
-        console.log("getBoundingClientRect().height: ", div.getBoundingClientRect().height);
+        // console.log("Height of .h-body: ", div.offsetHeight);
+        // console.log("getBoundingClientRect().height: ", div.getBoundingClientRect().height);
     </script>
 </html>
 <!-- onclick="toggleVisibility('h-body');" -->
