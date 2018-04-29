@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Increment Numbers Up or Down</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+        <style>
+            html, body {
+                min-height: 100%;
+            }
+            body, p {
+                font: normal 18px/1.5 "Lato", "Helvetica Neue", sans-serif;
+            }
+
+            body {
+                background: #4cb8c4; /* Old browsers */
+                background: -moz-linear-gradient(left, #4cb8c4 0%, #3cd3ad 100%); /* FF3.6-15 */
+                background: -webkit-linear-gradient(left, #4cb8c4 0%,#3cd3ad 100%); /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to right, #4cb8c4 0%,#3cd3ad 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cb8c4', endColorstr='#3cd3ad',GradientType=1 ); /* IE6-9 */
+                color: #fff;
+                padding: 50px 0;
+            }
+
+            .container {
+                width: 80%;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .container * {
+                box-sizing: border-box;
+            }
+
+            .flex-outer {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .flex-outer {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .flex-outer li {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .flex-outer > li:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            .flex-outer li label,
+            .flex-outer li button,
+            p {
+                padding: 8px;
+                font-weight: 300;
+                letter-spacing: .09em;
+                text-transform: uppercase;
+            }
+
+            .flex-outer > li > label {
+                flex: 1 0 120px;
+                max-width: 220px;
+            }
+
+            .flex-outer > li > label + * {
+                width: 100%;
+            }
+
+            .flex-outer li input,
+            .flex-outer li textarea {
+                padding: 15px;
+                border: none;
+                background-color: transparent;
+                text-align: center;
+            }
+
+            .flex-outer li input:focus,
+            .flex-outer li textarea:focus {
+                background-color: rgba(255,255,255, 1);
+            }
+
+            .flex-outer li button {
+                margin-left: auto;
+                border: 1px solid transparent;
+                background-color: rgba(255,255,255, .5);
+                color: #000;
+                text-transform: uppercase;
+                letter-spacing: .09em;
+                border-radius: 2px;
+                font-size: 10vh;
+                width: 50%;
+                padding: 8px 16px 25px;
+                line-height: 1;
+            }
+
+            .flex-outer li button:hover {
+                cursor: pointer;
+                background-color: rgba(255,255,255, .7);
+            }
+
+            input {
+                font-size: 20vh;
+                font-weight: 700;
+            }
+            
+            .textCenter {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <form>
+                <ul class="flex-outer">
+                <li>
+                    <label class='nameLabel' for='startingNumber'>Starting Number:</label>
+                    <input id='btn-counter' type='text' onClick='this.select()'></input>
+                </li>
+                <li>
+                    <button id="btnDown" type="button" onclick="dec()" name="less">-</button>
+                    <button id="btnUp" type="button" onclick="dec()" name="less">+</button>
+                </li>
+                </ul>
+            </form>
+        </div>     
+        
+        <script>
+            // TODO: bind up / down buttons to arrow keys
+            
+            var btnUp = document.getElementById("btnUp");
+
+            var counter = document.getElementById("btn-counter");
+
+            // Start the counter at 0 onload
+            counter.value = 0;
+
+            btnUp.onclick = function btnUp() {
+                counter.value++;
+            };
+            btnDown.onclick = function() {
+                counter.value--;
+            };
+        </script>
+    </body>
+</html>
