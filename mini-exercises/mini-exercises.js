@@ -229,3 +229,87 @@ for (var i = 0; i < books.length; i++) {
 	console.log("You still need to read " + bookInfo);
                     }
 }
+
+
+
+// if else if else statement
+function greaterNum(numOne, numTwo) {
+	if(numOne > numTwo){
+		console.log(numOne + " is greater.");
+    } else if(numOne < numTwo) {
+		console.log(numTwo + " is greater.");
+    }
+}
+
+greaterNum(9,2);
+
+
+
+// .toLowercase
+function helloWorld(en) {
+	if(en.toLowerCase() == "hello") {
+	return(en);
+    }
+}
+
+helloWorld("HELLO");
+
+
+
+
+// return a greeting based on language code
+function helloWorld(langCode) {
+	if(langCode.toLowerCase() == "es") {
+	return "Hola Mundo";
+    } else if(langCode.toLowerCase() == "de") {
+	return "Hallo Welt";
+    } else if(langCode.toLowerCase() == "en") {
+	return "Hello, world";
+    } else {
+	return "I don't have that language code.";
+    }
+}
+
+console.log(helloWorld("ES"));
+console.log(helloWorld("de"));
+console.log(helloWorld("en"));
+console.log(helloWorld("aa"));
+
+
+
+
+// assign grades based on integer argument
+function assignGrade(numGrade) {
+	if(numGrade >= 90) {
+		return "A";
+    } else if(numGrade <= 89 && numGrade >= 80) {
+		return "B";
+    } else if(numGrade <= 79 && numGrade >= 70) {
+		return "C";
+    } else if(numGrade <= 69 && numGrade >= 60) {
+		return "D";
+    } else {
+		return "F";
+    }
+}
+
+console.log(assignGrade(45));
+console.log(assignGrade(76));
+console.log(assignGrade(99));
+console.log(assignGrade(69));
+
+
+
+
+// pluralize the noun, accounting for zero being pluralized too
+function pluralize(noun, number) {
+	if(number != 1) {
+		return number + " " + noun + "s";
+    } else {
+		return number + " " + noun;
+    }
+}
+
+console.log (pluralize("cat", 5));
+console.log (pluralize("dog", 1));
+console.log (pluralize("chicken", 0));
