@@ -299,6 +299,26 @@ console.log(assignGrade(99));
 console.log(assignGrade(69));
 
 
+// log every value from 60 - 100
+function assignGrade(numGrade) {
+	if(numGrade >= 90) {
+		return "A";
+    } else if(numGrade <= 89 && numGrade >= 80) {
+		return "B";
+    } else if(numGrade <= 79 && numGrade >= 70) {
+		return "C";
+    } else if(numGrade <= 69 && numGrade >= 60) {
+		return "D";
+    } else {
+		return "F";
+    }
+}
+
+for(i = 60; i < 101; i++) {
+	console.log("For " + i + ", you got a " + assignGrade(i) + ".");
+}
+
+
 
 
 // pluralize the noun, accounting for zero being pluralized too
@@ -313,3 +333,50 @@ function pluralize(noun, number) {
 console.log (pluralize("cat", 5));
 console.log (pluralize("dog", 1));
 console.log (pluralize("chicken", 0));
+
+
+
+
+
+// FizzBuzz exercise, a couple ways
+for (var i = 1; i < 101; i++){
+	if (i % 15 == 0) {
+		console.log("FizzBuzz");
+	} else if (i % 3 == 0) {
+		console.log("Fizz");
+	} else if (i % 5 == 0) {
+		console.log("Buzz");
+	}
+	else console.log(i);
+}
+
+
+
+for (var i = 1; i < 101; i++){
+	if (i % 3 && i % 5 == 0) console.log("FizzBuzz");
+	else if(i % 3 == 0) console.log("Fizz");
+	else if(i % 5 == 0) console.log("Buzz");
+	else console.log(i);
+}
+
+
+
+
+// for loop to check numbers for even / odd
+for (i = 0; i <= 20; i++) {
+	if(i % 2 === 0) {
+		console.log(i + " is even!");
+    } else {
+		console.log(i + " is odd.");
+    }
+}
+
+
+
+// multiplication 
+var multiplier = 9;
+
+for (i = 0; i <= 10; i++) {
+	var result = i * multiplier;
+	console.log(i + " * 9 = " + result);
+}
