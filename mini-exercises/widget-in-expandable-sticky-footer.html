@@ -793,7 +793,7 @@
                 position: fixed;
                 bottom: -4px;
                 left: 50%;
-                -webkit-transform: translate(-50%, 0%); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+                -webkit-transform: translate(-50%, 0%); /* Chrome <36, Safari 5.1+, iOS < 9.2, Android =<4.4.4 */
                     -ms-transform: translate(-50%, 0%); /* IE 9 */
                         transform: translate(-50%, 0%); /* IE 10, Fx 16+, Op 12.1+ */
                 z-index: 99;
@@ -803,15 +803,14 @@
                 background-color: #fff;
                 border-top-left-radius: 8px;
                 border-top-right-radius: 8px;
-                max-width: 512px;
                 margin: 0 auto;
 
-                /* that drop shadow */
+                /* the drop shadow */
                 -webkit-box-shadow: 0px -4px 8px 0px rgba(0,0,0,0.1);
                    -moz-box-shadow: 0px -4px 8px 0px rgba(0,0,0,0.1);
                         box-shadow: 0px -4px 8px 0px rgba(0,0,0,0.1);
 
-                /* make it move smoothly */
+                /* make it move smoothly, with a subtle bump */
                 -webkit-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
                    -moz-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
                      -o-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
@@ -826,7 +825,7 @@
                 line-height: 1.4;
             }
             #h-drawer[data-open='false'] { /* watching for that toggle from 'true' */
-                bottom:-130px;
+                bottom:-127px; /* this should be height of the .h-body */
                 -webkit-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
                    -moz-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
                      -o-transition: bottom 300ms cubic-bezier(.51,1.15,.53,1.06);
@@ -835,7 +834,7 @@
             #h-header-click {
                 cursor: pointer;
                 text-align: center;
-                padding-top: .5rem;
+                padding-top: 5px;
             }
             #h-header-click > svg {
                 opacity: .3;
@@ -852,12 +851,13 @@
                         transition: opacity 300ms ease;
             }
             #h-drawer[data-open='false'] #h-header-click svg {
-                -webkit-transform: rotate(180deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+                -webkit-transform: rotate(180deg); /* Chrome <36, Safari 5.1+, iOS < 9.2, Android =<4.4.4 */
                     -ms-transform: rotate(180deg); /* IE 9 */
                         transform: rotate(180deg); /* IE 10, Fx 16+, Op 12.1+ */
             }
             .h-body {
-                padding: 0 1.5rem 1.5rem;
+                padding: 0 16px 16px; /* using px to not rely on base font size */
+                max-width: 512px;
                 margin: 0 auto;
             }
             .h-body:after { /* clearfix */
@@ -866,7 +866,7 @@
                 clear: both;
             }
             .h-value-prop {
-                margin-bottom: 1.5rem
+                margin-bottom: 24px;
             }
             .h-col-6 {
                 width: 50%;
@@ -1087,20 +1087,15 @@
                     <img class="h-hadley-logo" src="data:image/png;base64,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">
                 </div>
                 <div class="h-col-6 h-fbm-button">
-                    <a href="#">
+                    <a href="https://m.me/{{page_user_name}}/{{#ref}}?ref={{.}}{{/ref}}">
                         <svg width="200px" height="38px" viewBox="0 0 200 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g id="Artboard">
-                                    <g id="Group">
-                                        <rect id="Button-color" fill="#0084FF" x="0" y="0" width="200" height="37.5838926" rx="5.36912752"></rect>
-                                        <text id="Text" font-family="Helvetica" font-size="18.7919463" font-weight="normal" letter-spacing="-0.67114094" fill="#FFFFFF">
-                                            <tspan x="37.5838926" y="24.7114094">Send to Messenge</tspan>
-                                            <tspan x="183.549182" y="24.7114094">r</tspan>
-                                        </text>
-                                        <path d="M21.4646188,10.738255 C16.2819338,10.738255 12.0805369,14.5653194 12.0805369,19.2862717 C12.0805369,21.9718901 13.4402668,24.3681986 15.5667653,25.9352822 L15.5667653,29.2067543 L18.7692281,27.4763378 C19.6229604,27.7091488 20.5277436,27.8342884 21.4646188,27.8342884 C26.6473039,27.8342884 30.8487008,24.0072008 30.8487008,19.2862485 C30.8487008,14.5652961 26.6473039,10.738255 21.4646188,10.738255 Z" id="Bubble_Shape" fill="#FFFFFF"></path>
-                                        <polygon id="Bubble_Shape-path" fill="#0084FF" points="22.4529511 22.2009794 20.0259008 19.7448458 15.3518638 22.2628282 20.4762866 16.9655355 22.9033608 19.4216691 27.5773739 16.9036868"></polygon>
-                                    </g>
-                                </g>
+                                <rect id="Button-color" fill="#0084FF" x="0" y="0" width="200" height="37.5838926" rx="5.36912752"></rect>
+                                <text id="Text" font-family="Helvetica" font-size="18.7919463" font-weight="normal" letter-spacing="-0.67114094" fill="#FFFFFF">
+                                    <tspan x="37.5838926" y="24.7114094">Send to Messenger</tspan>
+                                </text>
+                                <path d="M21.4646188,10.738255 C16.2819338,10.738255 12.0805369,14.5653194 12.0805369,19.2862717 C12.0805369,21.9718901 13.4402668,24.3681986 15.5667653,25.9352822 L15.5667653,29.2067543 L18.7692281,27.4763378 C19.6229604,27.7091488 20.5277436,27.8342884 21.4646188,27.8342884 C26.6473039,27.8342884 30.8487008,24.0072008 30.8487008,19.2862485 C30.8487008,14.5652961 26.6473039,10.738255 21.4646188,10.738255 Z" id="Bubble_Shape" fill="#FFFFFF"></path>
+                                <polygon id="Bubble_Shape-path" fill="#0084FF" points="22.4529511 22.2009794 20.0259008 19.7448458 15.3518638 22.2628282 20.4762866 16.9655355 22.9033608 19.4216691 27.5773739 16.9036868"></polygon>
                             </g>
                         </svg>
                     </a>
@@ -1122,6 +1117,8 @@
         // testing the following...
 
         // var div = document.getElementsByClassName("h-body")[0];
+
+        // div.style.bottom = div.offsetHeight;
 
         // console.log("Height of .h-body: ", div.offsetHeight);
         // console.log("getBoundingClientRect().height: ", div.getBoundingClientRect().height);
