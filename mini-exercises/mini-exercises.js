@@ -200,6 +200,23 @@ for (var i = 0; i < recipe.ingredients.length; i++) {
     console.log(recipe.ingredients[i]);
 }
 
+// expanded to use propertyName
+var recipeCard = {
+	title: "Cookies",
+	servings: 4,
+	 ingredients: ["cinnamon", "cumin", "cocoa"]
+    }
+;
+
+console.log(Object.getOwnPropertyNames(recipeCard)[0].toUpperCase() + ":");
+console.log(recipeCard.title);
+console.log(Object.getOwnPropertyNames(recipeCard)[1].toUpperCase() + ":");
+console.log(recipeCard.servings);
+console.log(Object.getOwnPropertyNames(recipeCard)[2].toUpperCase() + ":");
+for (i = 0; i < recipeCard.ingredients.length; i++) {
+	console.log("— " + recipeCard.ingredients[i]);
+}
+
 
 
 
@@ -380,3 +397,51 @@ for (i = 0; i <= 10; i++) {
 	var result = i * multiplier;
 	console.log(i + " * 9 = " + result);
 }
+
+
+
+
+
+// array of albums, adding one to end, and printing an ordered list (not starting at "0.")
+var albums = ['self-titled', 'The White Album', 'Live at the Greek'];
+
+albums.push('Best of');
+
+for(i = 0; i < albums.length; i++) {
+	console.log((i + 1) + ". " + albums[i]);
+}
+
+// similar for string...
+var names = 'TRISTAN';
+
+for(i = 0; i < names.length; i++) {
+	console.log((i + 1) + ". " + names[i]);
+}
+
+// and another version
+var faveColors = ['Blue', 'Green', 'Orange', 'Red'];
+
+faveColors.push('Brown');
+
+for(i = 0; i < faveColors.length; i++) {
+	console.log("My " + "#" + (i + 1) + " choice is " + faveColors[i] + ".");
+}
+
+
+
+
+
+// changing objects and calling on the original
+var aboutMe = {
+	gender: "Male",
+	height: "6'5\"",
+	faveColors: ['Blue', 'Green', 'Orange', 'Red'],
+}
+
+const originalHeight = aboutMe.height;
+
+aboutMe.height = "6'4\""
+
+var newHeight = aboutMe.height;
+
+console.log("Was " + originalHeight + ", now it's " + newHeight);
