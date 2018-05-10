@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Random Colors</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+        <style>
+            html, body {
+                min-height: 100%;
+            }
+            body, p {
+                font: normal 18px/1.5 "Lato", "Helvetica Neue", sans-serif;
+            }
+
+            body {
+                background: #fff;
+                padding: 50px 0;
+            }
+
+            .container {
+                width: 80%;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .container * {
+                box-sizing: border-box;
+            }
+            .colorBox {
+                width: 30px;
+                height: 30px;
+                float: left;
+                background: pink;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+            <div class="colorBox"></div>
+        </div>     
+        
+        <script>
+            var coloredBoxes = document.getElementsByClassName("colorBox");
+
+            function getRandomArbitrary(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            for (var i = 0; i < coloredBoxes.length; i++) {
+                coloredBoxes[i].style.background = "rgba(" + Math.random() * 360 + ", " + Math.random() * 360 + ", " + Math.random() * 360 + ", " + getRandomArbitrary(.1, .9).toFixed(1) + ")";
+                // coloredBoxes[i].style.opacity = getRandomArbitrary(.1, .9).toFixed(1);
+                coloredBoxes[i].style.width = getRandomArbitrary(10, 50).toFixed(0) + "px";
+                
+                console.log(coloredBoxes[i]); // for testing
+            }
+        </script>
+    </body>
+</html>
