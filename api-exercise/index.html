@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>API exercise</title>
+  
+  <style>
+    #root {
+    max-width: 1200px;
+    margin: 0 auto;
+    }
+
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    }
+
+    .card {
+    margin: 1rem;
+    padding: .5rem 1rem;
+    border: 1px solid gray;
+    }
+
+    @media screen and (min-width: 600px) {
+    .card {
+        flex: 1 1 calc(50% - 2rem);
+    }
+    }
+
+    @media screen and (min-width: 900px) {
+    .card {
+        flex: 1 1 calc(33% - 2rem);
+    }
+    }
+  </style>
+
+</head>
+
+<body>
+    <!-- based on tutorial from https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/ -->
+  <div id="root"></div>
+
+  <script>
+    // Create a request variable and assign a new XMLHttpRequest object to it.
+    var request = new XMLHttpRequest();
+
+    // Open a new connection, using the GET request on the URL endpoint
+    request.open('GET', 'https://ghibliapi.herokuapp.com/films', true);
+    request.onload = function () {
+        // Begin accessing JSON data here
+        var data = JSON.parse(this.response);
+
+        if (request.status >= 200 && request.status < 400) {
+            data.forEach(movie => {
+                // Create a div with a card class
+                const card = document.createElement('div');
+                card.setAttribute('class', 'card');
+
+                // Create an h1 and set the text content to the film's title
+                const h1 = document.createElement('h1');
+                h1.textContent = movie.title;
+
+                // Create a p and set the text content to the film's description
+                const p = document.createElement('p');
+                movie.description = movie.description.substring(0, 300); // Limit to 300 chars
+                p.textContent = `${movie.description}...`; // End with an ellipses
+
+                // Create metadata for each movie
+                const span = document.createElement('small');
+                span.setAttribute('class', 'metadata');
+                span.textContent = `${Object.getOwnPropertyNames(movie)[3].toUpperCase()}` + ": " + `${movie.director}`;
+
+                // Append the cards to the container element
+                container.appendChild(card);
+
+                // Each card will contain an h1 and a p
+                card.appendChild(h1);
+                card.appendChild(p);
+                card.appendChild(span);
+            });
+        } else {
+            const errorMessage = document.createElement('marquee'); // Kidding about using marquee!
+            errorMessage.textContent = `Gah, it's not working!`;
+            app.appendChild(errorMessage);
+        }
+        }
+    // Send request
+    request.send();
+
+
+
+    const app = document.getElementById('root');
+
+    const logo = document.createElement('img');
+    logo.src = 'logo.png';
+
+    const container = document.createElement('div');
+    container.setAttribute('class', 'container');
+
+    app.appendChild(logo);
+    app.appendChild(container);
+
+  </script>
+</body>
+
+</html>
