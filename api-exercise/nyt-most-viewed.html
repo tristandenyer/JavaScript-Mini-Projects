@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Movies API exercise</title>
+  
+  <style>
+    #root {
+    max-width: 1200px;
+    margin: 0 auto;
+    }
+
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    }
+
+    .card {
+    margin: 1rem;
+    padding: .5rem 1rem;
+    border: 1px solid gray;
+    }
+
+    @media screen and (min-width: 600px) {
+    .card {
+        flex: 1 1 calc(50% - 2rem);
+    }
+    }
+
+    @media screen and (min-width: 900px) {
+    .card {
+        flex: 1 1 calc(33% - 2rem);
+    }
+    }
+  </style>
+
+</head>
+
+<body>
+    <!-- based on tutorial from https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/ -->
+  <div id="root"></div>
+
+  <script>
+    // Create a request variable and assign a new XMLHttpRequest object to it.
+    var request = new XMLHttpRequest();
+
+    // Open a new connection, using the GET request on the URL endpoint
+    request.open('GET', 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/Food/30.json?api-key=73296df62e22466aa6ceaf8f38ca88d9'); // Seriously, this is using my NYT API key, get your own at https://developer.nytimes.com/signup
+    
+    request.onload = function () {
+        // Begin accessing JSON data here
+        var data = JSON.parse(this.response);
+        console.log(data.num_results);
+        
+        // Create an h1
+        const h1 = document.createElement('h1');
+            h1.textContent = `We found ` + `${data.num_results}` + " articles";
+
+// TODO: create a loop
+        for (i = 0; i < data.num_results; i++) {
+            
+            // Create a div with a card class
+            const card = document.createElement('div');
+            card.setAttribute('class', 'card');
+
+            // Create an h2 and set the text content to the article's title
+            const h2 = document.createElement('h2');
+            h2.textContent = data.results[i].title;
+
+            // Create byline
+            const small = document.createElement('small');
+            small.setAttribute('class', 'author');
+            small.textContent = data.results[i].byline;
+
+            // Create abstract
+            const p = document.createElement('p');
+            p.setAttribute('class', 'abstract');
+            p.textContent = data.results[i].abstract;
+
+            // Create text link to article
+            const href = document.createElement('button');
+            href.setAttribute('onclick', 'window.location.href=\'' + `${data.results[i].url}` + "'");
+            href.textContent = `Link`;
+
+            root.appendChild(h1);
+            container.appendChild(card);
+            card.appendChild(h2);
+            card.appendChild(small);
+            card.appendChild(p);
+            card.appendChild(href);
+        }
+        }
+    // Send request
+    request.send();
+
+
+
+    const app = document.getElementById('root');
+
+    const container = document.createElement('div');
+    container.setAttribute('class', 'container');
+
+    app.appendChild(container);
+
+  </script>
+</body>
+
+</html>
