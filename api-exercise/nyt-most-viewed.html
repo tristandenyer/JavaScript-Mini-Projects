@@ -5,35 +5,83 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Movies API exercise</title>
+  <title>NYT API exercise</title>
+  <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet">
   
   <style>
+    html {
+        font-size: 14px;
+        background-color: #EFF1F1;
+    }
     #root {
-    max-width: 1200px;
-    margin: 0 auto;
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     .container {
-    display: flex;
-    flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     .card {
-    margin: 1rem;
-    padding: .5rem 1rem;
-    border: 1px solid gray;
+        margin: 1rem;
+    -webkit-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+                box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+        border-radius: 2px;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sectionFlag {
+        position: absolute;
+        top: .5rem;
+        left: 0;
+        background-color: #e33d26;
+        color: #fff;
+        padding: .25rem .5rem;
+        text-transform: uppercase;
+        
+    }
+    .sectionFlag, small, p {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+        opacity: 1;
+    }
+    h2, small, p {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    h2 {
+        margin: 0;
+        padding: 1rem;
+        font-family: 'Crete Round', georgia,"times new roman",times,serif;
+    }
+    .articleLink:link, .articleLink:visited {
+        color: initial;
+        text-decoration: none;
+    }
+
+    .articleLink:hover, .articleLink:active {
+        text-decoration: underline;
     }
 
     @media screen and (min-width: 600px) {
-    .card {
-        flex: 1 1 calc(50% - 2rem);
-    }
+        .card {
+            flex: 1 1 calc(50% - 2rem);
+        }
     }
 
     @media screen and (min-width: 900px) {
-    .card {
-        flex: 1 1 calc(33% - 2rem);
-    }
+        .card {
+            flex: 1 1 calc(33% - 2rem);
+        }
     }
   </style>
 
@@ -66,7 +114,23 @@
             const card = document.createElement('div');
             card.setAttribute('class', 'card');
 
-            // Create an h2 and set the text content to the article's title
+            // Create section flag
+            const sectionFlag = document.createElement('span');
+            sectionFlag.setAttribute('class', 'sectionFlag');
+            sectionFlag.textContent = data.results[i].section;
+
+            // Create article image
+            const articleImage = document.createElement('img');
+            articleImage.setAttribute('src', data.results[i].media[0]["media-metadata"][2].url); // TODO: 2 is not always the largest image. Search for largest and use that.
+
+
+            // Create href for article title
+            const a = document.createElement('a');
+            a.setAttribute('href', data.results[i].url);
+            a.setAttribute('target', '_blank');
+            a.setAttribute('class', 'articleLink');
+
+            // Create an h2 inside the above href, and set the text content to the article's title
             const h2 = document.createElement('h2');
             h2.textContent = data.results[i].title;
 
@@ -80,17 +144,14 @@
             p.setAttribute('class', 'abstract');
             p.textContent = data.results[i].abstract;
 
-            // Create text link to article
-            const href = document.createElement('button');
-            href.setAttribute('onclick', 'window.location.href=\'' + `${data.results[i].url}` + "'");
-            href.textContent = `Link`;
-
-            root.appendChild(h1);
+                 root.appendChild(h1);
             container.appendChild(card);
-            card.appendChild(h2);
-            card.appendChild(small);
-            card.appendChild(p);
-            card.appendChild(href);
+                 card.appendChild(sectionFlag);
+                 card.appendChild(a);
+                 card.appendChild(small);
+                 card.appendChild(p);
+                    a.appendChild(articleImage);
+                    a.appendChild(h2);
         }
         }
     // Send request
