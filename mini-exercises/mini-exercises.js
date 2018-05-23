@@ -445,3 +445,19 @@ aboutMe.height = "6'4\""
 var newHeight = aboutMe.height;
 
 console.log("Was " + originalHeight + ", now it's " + newHeight);
+
+
+
+
+
+// change style of element onclick
+
+/* <p id="para">Some text here</p>
+<button onclick="changeColor('blue');">blue</button> // TODO: use addEventListener in JS to keep onclick out of markup
+<button onclick="changeColor('red');">red</button>
+*/
+
+function changeColor(newColor) {
+  var elem = document.getElementById('para');
+  elem.style.color = newColor;
+}
