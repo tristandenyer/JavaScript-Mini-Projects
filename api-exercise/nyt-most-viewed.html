@@ -108,94 +108,87 @@
 
 <body>
     <!-- based on tutorial from https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/ -->
-  <div id="root"></div>
+    <div id="root"></div>
 
-  <script>
-    // Create a request variable and assign a new XMLHttpRequest object to it.
-    var request = new XMLHttpRequest();
+    <script>
+        // Create a request variable and assign a new XMLHttpRequest object to it.
+        var request = new XMLHttpRequest();
 
-    // Open a new connection, using the GET request on the URL endpoint
-    request.open('GET', 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/Food/30.json?api-key=73296df62e22466aa6ceaf8f38ca88d9'); // Seriously, this is using my NYT API key, get your own at https://developer.nytimes.com/signup
+        // Open a new connection, using the GET request on the URL endpoint
+        request.open('GET', 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/Food/30.json?api-key=73296df62e22466aa6ceaf8f38ca88d9'); // Seriously, this is using my NYT API key, get your own at https://developer.nytimes.com/signup
     
-    request.onload = function () {
-        // Begin accessing JSON data here
-        var data = JSON.parse(this.response);
-        console.log(data.num_results);
-        
-        // Create an h1
-        const h1 = document.createElement('h1');
-        h1.textContent = `We found ` + `${data.num_results}` + " articles";
-
-        container.insertAdjacentElement('afterbegin', h1);
-
-        // Create copyright
-        const copyright = document.createElement('p');
-        copyright.setAttribute('class', 'copyright');
-        copyright.textContent = data.copyright;
-
-        root.appendChild(copyright);
-
-// TODO: create a loop
-        for (i = 0; i < data.num_results; i++) {
+        request.onload = function () {
+            // Begin accessing JSON data here
+            var data = JSON.parse(this.response);
             
-            // Create a div with a card class
-            const card = document.createElement('div');
-            card.setAttribute('class', 'card');
+            // Create an h1
+            const h1 = document.createElement('h1');
+            h1.textContent = `We found ` + `${data.num_results}` + " articles";
 
-            // Create section flag
-            const sectionFlag = document.createElement('span');
-            sectionFlag.setAttribute('class', 'sectionFlag');
-            sectionFlag.textContent = data.results[i].section;
+            // Place the h1 at top of page, before Cards
+            container.insertAdjacentElement('afterbegin', h1);
 
-            // Create article image
-            const articleImage = document.createElement('img');
-            articleImage.setAttribute('src', data.results[i].media[0]["media-metadata"][2].url); // TODO: 2 is not always the largest image. Search for largest and use that.
+            // Create copyright, then place at bottom of page, outside container
+            const copyright = document.createElement('p');
+            copyright.setAttribute('class', 'copyright');
+            copyright.textContent = data.copyright;
+            root.appendChild(copyright);
 
+            for (i = 0; i < data.num_results; i++) {
+                
+                // Create a div with a card class
+                const card = document.createElement('div');
+                card.setAttribute('class', 'card');
 
-            // Create href for article title
-            const a = document.createElement('a');
-            a.setAttribute('href', data.results[i].url);
-            a.setAttribute('target', '_blank');
-            a.setAttribute('class', 'articleLink');
+                // Create section flag
+                const sectionFlag = document.createElement('span');
+                sectionFlag.setAttribute('class', 'sectionFlag');
+                sectionFlag.textContent = data.results[i].section;
 
-            // Create an h2 inside the above href, and set the text content to the article's title
-            const h2 = document.createElement('h2');
-            h2.textContent = data.results[i].title;
+                // Create article image
+                const articleImage = document.createElement('img');
+                articleImage.setAttribute('src', data.results[i].media[0]["media-metadata"][2].url); // TODO: 2 is not always the largest image. Search for largest and use that.
 
-            // Create byline
-            const small = document.createElement('small');
-            small.setAttribute('class', 'author');
-            small.textContent = data.results[i].byline;
+                // Create href for article title
+                const a = document.createElement('a');
+                a.setAttribute('href', data.results[i].url);
+                a.setAttribute('target', '_blank');
+                a.setAttribute('class', 'articleLink');
 
-            // Create abstract
-            const p = document.createElement('p');
-            p.setAttribute('class', 'abstract');
-            p.textContent = data.results[i].abstract;
+                // Create an h2 inside the above href, and set the text content to the article's title
+                const h2 = document.createElement('h2');
+                h2.textContent = data.results[i].title;
 
-            container.appendChild(card);
-                 card.appendChild(sectionFlag);
-                 card.appendChild(a);
-                 card.appendChild(small);
-                 card.appendChild(p);
-                    a.appendChild(articleImage);
-                    a.appendChild(h2);
-        }
-        
-        
-        }
-    // Send request
-    request.send();
+                // Create byline
+                const small = document.createElement('small');
+                small.setAttribute('class', 'author');
+                small.textContent = data.results[i].byline;
 
+                // Create abstract
+                const p = document.createElement('p');
+                p.setAttribute('class', 'abstract');
+                p.textContent = data.results[i].abstract;
 
+                container.appendChild(card);
+                    card.appendChild(sectionFlag);
+                    card.appendChild(a);
+                    card.appendChild(small);
+                    card.appendChild(p);
+                        a.appendChild(articleImage);
+                        a.appendChild(h2);
+            }
+            }
+        // Send request
+        request.send();
 
-    const app = document.getElementById('root');
+        const app = document.getElementById('root');
 
-    const container = document.createElement('div');
-    container.setAttribute('class', 'container');
+        // Create Container div for Cards to sit in
+        const container = document.createElement('div');
+        container.setAttribute('class', 'container');
 
-    app.appendChild(container);
-
-  </script>
+        app.appendChild(container);
+    </script>
 </body>
 
 </html>
