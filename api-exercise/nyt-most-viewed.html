@@ -21,13 +21,14 @@
     .container {
         display: flex;
         flex-wrap: wrap;
+        margin-bottom: 1rem;
     }
 
     .card {
         margin: 1rem;
-    -webkit-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
-                box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+        -webkit-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+            -moz-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
+                    box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
         border-radius: 2px;
         position: relative;
         background-color: #fff;
@@ -54,6 +55,17 @@
         border-top-right-radius: 2px;
         opacity: 1;
     }
+    h1, h2 {
+        font-family: 'Crete Round', georgia,"times new roman",times,serif;
+    }
+    h1 {
+        width: 100%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-bottom: .5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #ccc;
+    }
     h2, small, p {
         padding-left: 1rem;
         padding-right: 1rem;
@@ -61,7 +73,6 @@
     h2 {
         margin: 0;
         padding: 1rem;
-        font-family: 'Crete Round', georgia,"times new roman",times,serif;
     }
     .articleLink:link, .articleLink:visited {
         color: initial;
@@ -70,6 +81,14 @@
 
     .articleLink:hover, .articleLink:active {
         text-decoration: underline;
+    }
+
+    .copyright {
+        padding: 1rem 0;
+        margin: 0 1rem;
+        border-top: 1px solid #ccc;
+        color: #999;
+        font-size: 0.857rem;
     }
 
     @media screen and (min-width: 600px) {
@@ -89,84 +108,87 @@
 
 <body>
     <!-- based on tutorial from https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/ -->
-  <div id="root"></div>
+    <div id="root"></div>
 
-  <script>
-    // Create a request variable and assign a new XMLHttpRequest object to it.
-    var request = new XMLHttpRequest();
+    <script>
+        // Create a request variable and assign a new XMLHttpRequest object to it.
+        var request = new XMLHttpRequest();
 
-    // Open a new connection, using the GET request on the URL endpoint
-    request.open('GET', 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/Food/30.json?api-key=73296df62e22466aa6ceaf8f38ca88d9'); // Seriously, this is using my NYT API key, get your own at https://developer.nytimes.com/signup
+        // Open a new connection, using the GET request on the URL endpoint
+        request.open('GET', 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/Food/30.json?api-key=73296df62e22466aa6ceaf8f38ca88d9'); // Seriously, this is using my NYT API key, get your own at https://developer.nytimes.com/signup
     
-    request.onload = function () {
-        // Begin accessing JSON data here
-        var data = JSON.parse(this.response);
-        console.log(data.num_results);
-        
-        // Create an h1
-        const h1 = document.createElement('h1');
+        request.onload = function () {
+            // Begin accessing JSON data here
+            var data = JSON.parse(this.response);
+            
+            // Create an h1
+            const h1 = document.createElement('h1');
             h1.textContent = `We found ` + `${data.num_results}` + " articles";
 
-// TODO: create a loop
-        for (i = 0; i < data.num_results; i++) {
-            
-            // Create a div with a card class
-            const card = document.createElement('div');
-            card.setAttribute('class', 'card');
+            // Place the h1 at top of page, before Cards
+            container.insertAdjacentElement('afterbegin', h1);
 
-            // Create section flag
-            const sectionFlag = document.createElement('span');
-            sectionFlag.setAttribute('class', 'sectionFlag');
-            sectionFlag.textContent = data.results[i].section;
+            // Create copyright, then place at bottom of page, outside container
+            const copyright = document.createElement('p');
+            copyright.setAttribute('class', 'copyright');
+            copyright.textContent = data.copyright;
+            root.appendChild(copyright);
 
-            // Create article image
-            const articleImage = document.createElement('img');
-            articleImage.setAttribute('src', data.results[i].media[0]["media-metadata"][2].url); // TODO: 2 is not always the largest image. Search for largest and use that.
+            for (i = 0; i < data.num_results; i++) {
+                
+                // Create a div with a card class
+                const card = document.createElement('div');
+                card.setAttribute('class', 'card');
 
+                // Create section flag
+                const sectionFlag = document.createElement('span');
+                sectionFlag.setAttribute('class', 'sectionFlag');
+                sectionFlag.textContent = data.results[i].section;
 
-            // Create href for article title
-            const a = document.createElement('a');
-            a.setAttribute('href', data.results[i].url);
-            a.setAttribute('target', '_blank');
-            a.setAttribute('class', 'articleLink');
+                // Create article image
+                const articleImage = document.createElement('img');
+                articleImage.setAttribute('src', data.results[i].media[0]["media-metadata"][2].url); // TODO: 2 is not always the largest image. Search for largest and use that.
 
-            // Create an h2 inside the above href, and set the text content to the article's title
-            const h2 = document.createElement('h2');
-            h2.textContent = data.results[i].title;
+                // Create href for article title
+                const a = document.createElement('a');
+                a.setAttribute('href', data.results[i].url);
+                a.setAttribute('target', '_blank');
+                a.setAttribute('class', 'articleLink');
 
-            // Create byline
-            const small = document.createElement('small');
-            small.setAttribute('class', 'author');
-            small.textContent = data.results[i].byline;
+                // Create an h2 inside the above href, and set the text content to the article's title
+                const h2 = document.createElement('h2');
+                h2.textContent = data.results[i].title;
 
-            // Create abstract
-            const p = document.createElement('p');
-            p.setAttribute('class', 'abstract');
-            p.textContent = data.results[i].abstract;
+                // Create byline
+                const small = document.createElement('small');
+                small.setAttribute('class', 'author');
+                small.textContent = data.results[i].byline;
 
-                 root.appendChild(h1);
-            container.appendChild(card);
-                 card.appendChild(sectionFlag);
-                 card.appendChild(a);
-                 card.appendChild(small);
-                 card.appendChild(p);
-                    a.appendChild(articleImage);
-                    a.appendChild(h2);
-        }
-        }
-    // Send request
-    request.send();
+                // Create abstract
+                const p = document.createElement('p');
+                p.setAttribute('class', 'abstract');
+                p.textContent = data.results[i].abstract;
 
+                container.appendChild(card);
+                    card.appendChild(sectionFlag);
+                    card.appendChild(a);
+                    card.appendChild(small);
+                    card.appendChild(p);
+                        a.appendChild(articleImage);
+                        a.appendChild(h2);
+            }
+            }
+        // Send request
+        request.send();
 
+        const app = document.getElementById('root');
 
-    const app = document.getElementById('root');
+        // Create Container div for Cards to sit in
+        const container = document.createElement('div');
+        container.setAttribute('class', 'container');
 
-    const container = document.createElement('div');
-    container.setAttribute('class', 'container');
-
-    app.appendChild(container);
-
-  </script>
+        app.appendChild(container);
+    </script>
 </body>
 
 </html>
