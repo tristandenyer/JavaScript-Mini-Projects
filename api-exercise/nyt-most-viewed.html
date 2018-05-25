@@ -9,21 +9,29 @@
   <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet">
   
   <style>
+    /* start day theme */
     html {
         font-size: 14px;
         background-color: #EFF1F1;
     }
-    #root {
+    #root, #masthead {
         max-width: 1200px;
         margin: 0 auto;
     }
-
+    #masthead .container {
+        border-bottom: 1px solid #ccc;
+    }
     .container {
         display: flex;
         flex-wrap: wrap;
         margin-bottom: 1rem;
     }
-
+    #header, #toggle {
+        display: inline-block;
+    }
+    #toggle {
+        text-align: right;
+    }
     .card {
         margin: 1rem;
         -webkit-box-shadow: 0px 7px 19px 0px rgba(0,0,0,0.2);
@@ -44,7 +52,9 @@
         text-transform: uppercase;
         
     }
-    .sectionFlag, small, p {
+    .sectionFlag, 
+    small, 
+    p {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
@@ -55,18 +65,17 @@
         border-top-right-radius: 2px;
         opacity: 1;
     }
-    h1, h2 {
+    h1, 
+    h2 {
         font-family: 'Crete Round', georgia,"times new roman",times,serif;
     }
-    h1 {
-        width: 100%;
+    #header, #toggle {
         margin-left: 1rem;
         margin-right: 1rem;
-        margin-bottom: .5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #ccc;
     }
-    h2, small, p {
+    h2, 
+    small, 
+    p {
         padding-left: 1rem;
         padding-right: 1rem;
     }
@@ -74,12 +83,13 @@
         margin: 0;
         padding: 1rem;
     }
-    .articleLink:link, .articleLink:visited {
-        color: initial;
+    .articleLink:link, 
+    .articleLink:visited {
+        color: #000;
         text-decoration: none;
     }
-
-    .articleLink:hover, .articleLink:active {
+    .articleLink:hover, 
+    .articleLink:active {
         text-decoration: underline;
     }
 
@@ -92,7 +102,7 @@
     }
 
     @media screen and (min-width: 600px) {
-        .card {
+        .card, #header, #toggle {
             flex: 1 1 calc(50% - 2rem);
         }
     }
@@ -102,12 +112,68 @@
             flex: 1 1 calc(33% - 2rem);
         }
     }
+    #dayNightToggle {
+        background: transparent;
+        border: none;
+        color: #197bce;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 1.5rem 0 1rem;
+        line-height: 1.4;
+        padding: .5rem;
+    }
+
+    /* start night theme */
+    body, 
+    h1, 
+    h2, 
+    p, 
+    small, 
+    .card {
+        transition: all 1.5s ease-out;
+    }
+    html > body.night {
+        background-color: #141d26;
+    }
+    body.night h1, 
+    body.night h2, 
+    body.night p, 
+    body.night small {
+        color: #eee;
+    }
+    body.night .card {
+        background-color: #243447;
+    }
+    body.night .sectionFlag {
+        background-color: #c51f5d;
+    }
+    body.night h1 {
+        border-bottom: 1px solid #243447;
+    }
+    body.night .copyright {
+        border-top: 1px solid #243447;
+        color: #ccc;
+    }
+    body.night .articleLink:hover, 
+    body.night .articleLink:active {
+        text-decoration: underline;
+        text-decoration-color: #ccc; /* TODO: why do I need this? */
+    }
   </style>
 
 </head>
 
-<body>
+<body id="theme" data-day="true">
     <!-- based on tutorial from https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/ -->
+    
+    <!-- start day/night theme toggle -->
+    <div id="masthead">
+        <div class="container">
+            <div id="header"></div>
+            <div id="toggle"><button id="dayNightToggle">Show Night Theme</button></div>
+        </div>
+    </div>
+
     <div id="root"></div>
 
     <script>
@@ -126,7 +192,8 @@
             h1.textContent = `We found ` + `${data.num_results}` + " articles";
 
             // Place the h1 at top of page, before Cards
-            container.insertAdjacentElement('afterbegin', h1);
+            const header = document.getElementById('header');
+            header.appendChild(h1);
 
             // Create copyright, then place at bottom of page, outside container
             const copyright = document.createElement('p');
@@ -188,6 +255,31 @@
         container.setAttribute('class', 'container');
 
         app.appendChild(container);
+
+        // Day & night toggle
+        var toggleState = document.getElementById('theme'),
+            toggleClick = document.getElementById('dayNightToggle');
+            
+        function toggleTheme() {
+            if(toggleState.dataset.day == 'true'){
+                toggleState.dataset.day = 'false';
+                // switch to night theme
+                toggleState.classList.add('night');
+                // switch button text to 'day'
+                toggleClick.textContent = 'Show Day Theme';
+            } else {
+                toggleState.dataset.day = 'true';
+                // remove night theme
+                toggleState.classList.remove('night');
+                // switch button text to 'night'
+                toggleClick.textContent = 'Show Night Theme';
+            }
+        }
+
+        if(document.getElementById('theme')) {
+            // add event listener on #dayNightToggle only
+            toggleClick.addEventListener('click', toggleTheme);
+        }
     </script>
 </body>
 
