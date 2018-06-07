@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Drag-n-drop</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+        <style>
+            html, body {
+                min-height: 100%;
+            }
+            body, p {
+                font: normal 18px/1.5 "Lato", "Helvetica Neue", sans-serif;
+            }
+            .box {
+            height: 100px;
+            width: 100px;
+            /* background-color: blue; */
+            position: relative;
+            top: 5px;
+            left: 5px;
+            cursor: pointer;
+            }
+
+            .held {
+            /* border: solid 10px black; */
+            background-color: rgba(0,0,255, .9);
+            }
+
+            .holder {
+            height: 110px;
+            width: 110px;
+            margin: 10px;
+            border: solid 5px black;
+            display: inline-block;
+            }
+            #red {
+                background-color: red;
+            }
+            #blue {
+                background-color: blue;
+            }
+
+            .hovered {
+            border: dotted 5px black;
+            }
+
+            .invisible {
+            display: none;
+            }
+
+            #container {
+            margin: auto;
+            top: 100px;
+            width: 90%;
+            position: relative;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 
+        based on tutorial: https://medium.com/quick-code/simple-javascript-drag-drop-d044d8c5bed5 
+        with modifications, currently not working as it should 
+        -->
+        <div id="container">
+            <div id="red" class="holder" data-color="red">
+            </div>            
+            <div id="red" class="holder" data-color="red">
+            </div>
+            <div id="blue" class="holder" data-color="blue">
+            </div>
+            <div id="red" class="holder" data-color="red">
+            </div>
+            <div id="red" class="holder" data-color="red">
+            </div>
+            <div class="holder" data-color="blue">
+            </div>
+            <div id="red" class="holder" data-color="red">
+            </div>
+            <div id="red" class="holder" data-color="red">
+            </div>
+            <div id="blue" class="holder" data-color="blue">
+            </div>
+            <hr>
+            <!-- TODO: gets confused and thinks this is red on drop? -->
+            <div class="holder" >
+                <div id="blue" class="box" draggable="true" data-color="blue"></div>
+            </div>
+            
+            <div class="holder" >
+                <div id="red" class="box" draggable="true" data-color="red"></div>
+            </div>
+        </div>
+
+        <script>
+            class App {
+
+                static init() {
+
+                    App.box = document.getElementsByClassName('box')[0,1] // originally [0]
+
+                    App.box.addEventListener("dragstart", App.dragstart)
+                    App.box.addEventListener("dragend", App.dragend)
+
+                    const containers = document.getElementsByClassName('holder')
+
+                    for(const container of containers) {
+                        container.addEventListener("dragover", App.dragover)
+                        container.addEventListener("dragenter", App.dragenter)
+                        container.addEventListener("dragleave", App.dragleave)
+                        container.addEventListener("drop", App.drop)
+                    }
+                }
+                
+                static dragstart() {
+                    this.className += " held"
+                    setTimeout(()=>this.className="invisible", 0)
+                }
+
+                static dragend() {
+                    this.className = "box"
+                }
+
+                static dragover(e) {
+                    e.preventDefault()
+                }
+
+                static dragenter(e) {
+                    e.preventDefault()
+                    this.className += " hovered"
+                }
+
+                static dragleave() {
+                    this.className = "holder"
+                }
+                
+                static drop() {
+                    this.className = "holder"
+                    // TODO: the following is breaking the hover state ???
+                    // check to see if parent and child match
+                    var c = App.box.getAttribute('data-color'), // this isn't specific enough
+                        p = this.getAttribute('data-color');
+                        // console output to verify and test
+                        console.log(this.parentNode);
+                        console.log('Child color is ' + c);
+                        console.log('Parent color is ' + p);
+                    if(c !== p){
+                        alert('This is wrong!');
+                    } else {
+                        this.append(App.box);
+                    }
+                    
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", App.init)
+            
+        </script>
+    </body>
+</html>
