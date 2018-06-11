@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Clone Form Field</title>
+    <style>
+      html {
+        width: 100%;
+        height: inherit;
+      }
+      body {
+        margin: 0;
+      }
+      #parent {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      #cloneMe {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        margin: 1rem;
+        flex: 1 1 calc(33% - 2rem);
+      }
+      button {
+        background-color: #0a3b74;
+        color: #fff;
+        font-size: 20px;
+        padding: .5rem 1rem;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent">
+      <div id="cloneMe"></div>      
+    </div>
+    <div class="addBox">
+      <button id="cloneIt">Add box</button>
+    </div>
+    
+
+    <script>
+      // TODOs iterate on clone's ID to append unique and sequential IDs
+
+      var original = document.getElementById("cloneMe");
+      var cloneButton = document.getElementById("cloneIt");
+
+      function addAnotherBox() {
+        var cloned = original.cloneNode(true);        
+        document.getElementById("parent").appendChild(cloned);       
+      }
+      
+      cloneButton.addEventListener('click', addAnotherBox);
+      
+    </script>    
+  </body>
+</html>
