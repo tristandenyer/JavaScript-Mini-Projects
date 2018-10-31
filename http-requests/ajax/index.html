@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ajax exercise</title>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .red:after {
+            content: '\0279A';
+        }
+
+        .gray {
+            color: inherit;
+        }
+
+        .gray:after {
+            content: '\2014';
+        }
+
+        .green {
+            color: rgb(3, 194, 3);
+        }
+
+        .green:after {
+            content: '\02798';
+        }
+
+        .red:after,
+        .gray:after,
+        .green:after {
+            font-size: 1.2rem;
+            margin-left: .2rem
+        }
+
+        .data {
+            font-weight: 600
+        }
+
+        pre {
+            counter-reset: line-numbering;
+            background: #2c3e50;
+            padding: 1rem;
+            display: block;
+            color: #ecf0f1;
+            line-height: 140%;
+            border-radius: .25rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        pre code {
+            padding: 10px;
+            color: rgb(225, 225, 225);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ajax exercise</h1>
+    <p>Reload page to see new response, and running log of response times below.</p>
+    <pre><code id="response"></code></pre>
+    <p>Received JSON in <span class="data"><span id="timestamp"></span> ms.</span></p>
+    <p>Past times (ms): <span class="data"><span id="runningTotal"></span></span></p>
+    <p>Average of <span id="runningTotalLength"></span> times: <span class="data"><span id="avgTimestamps" class=""></span></span></p>
+    <hr>
+    <small>Using <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener noreferrer">JSONPlaceholder</a>
+        for data.</small>
+    <script>
+        let start_time = new Date().getTime();
+        const httpReq = new XMLHttpRequest();
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+        const url = 'https://jsonplaceholder.typicode.com/todos/' + getRandomInt(50);
+        httpReq.open("GET", url);
+        httpReq.send();
+        httpReq.onreadystatechange = (e) => {
+            if (httpReq.readyState === 4 && httpReq.status === 200) {
+                document.getElementById('response').textContent = httpReq.response;
+                let rec_time = new Date().getTime();
+                let timeDiff = rec_time - start_time;
+                document.getElementById('timestamp').textContent = timeDiff;
+                let runningTotal = document.getElementById('runningTotal').textContent = JSON.parse(sessionStorage.getItem("list_time_stamps"));
+
+                if (!sessionStorage.getItem("list_time_stamps")) {
+                    let pastTimeStamp = [];
+                    pastTimeStamp.push(timeDiff);
+                    sessionStorage.setItem("list_time_stamps", JSON.stringify(pastTimeStamp));
+                    runningTotal;
+                } else {
+                    let runningTotal = sessionStorage.getItem("list_time_stamps");
+                    pastTimeStamp = JSON.parse(runningTotal);
+                    pastTimeStamp.push(timeDiff);
+                    sessionStorage.setItem("list_time_stamps", JSON.stringify(pastTimeStamp));
+                    runningTotal;
+                }
+                // find average of timestamps
+                let sum = 0;
+                let elmt = JSON.parse(sessionStorage.getItem("list_time_stamps"))
+                for (let i = 0; i < elmt.length; i++) {
+                    sum += parseInt(elmt[i], 10); //don't forget to add the base
+                }
+
+                let avg = sum / elmt.length,
+                    savedAvg;
+
+                document.getElementById('avgTimestamps').textContent = avg.toFixed(0) + " ms";
+                document.getElementById('runningTotalLength').textContent = JSON.parse(sessionStorage.getItem("list_time_stamps")).length;
+
+                // function savePreviousAvg(type, value) {
+                //     sessionStorage.setItem(type, value);
+                // }
+
+                savedAvg = parseInt(sessionStorage.getItem('avg_timestamp'));
+                let el = document.getElementById('avgTimestamps');
+                let savePreviousAvg = sessionStorage.setItem('avg_timestamp', avg.toFixed(0));
+                if (savedAvg < avg.toFixed(0)) {
+                    el.className = 'red';
+                    savePreviousAvg;
+                }
+                else if (savedAvg > avg.toFixed(0)) {
+                    el.className = 'green';
+                    savePreviousAvg;
+                } else {
+                    el.className = 'gray';
+                    savePreviousAvg;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
