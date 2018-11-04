@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Promises exercise</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .red:after {
+            content: '\0279A';
+        }
+
+        .gray {
+            color: inherit;
+        }
+
+        .gray:after {
+            content: '\2014';
+        }
+
+        .green {
+            color: rgb(3, 194, 3);
+        }
+
+        .green:after {
+            content: '\02798';
+        }
+
+        .red:after,
+        .gray:after,
+        .green:after {
+            font-size: 1.2rem;
+            margin-left: .2rem
+        }
+
+        .data {
+            font-weight: 600
+        }
+
+        pre {
+            counter-reset: line-numbering;
+            background: #ccc;
+            padding: 1rem;
+            display: block;
+            line-height: 140%;
+            border-radius: .25rem;
+
+        }
+
+        pre code {
+            padding: 10px;
+            color: #333333;
+            font-family: Lucida Console, Lucida Sans Typewriter, monaco, Bitstream Vera Sans Mono, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .logItem {
+            padding: 1rem;
+        }
+
+        .logItem span {
+            font-size: .75rem;
+            text-transform: uppercase;
+        }
+
+        .ready,
+        .error {
+            margin-top: 0;
+            color: rgb(0, 204, 202)
+        }
+
+        .ready {
+            color: rgb(0, 204, 202)
+        }
+
+        .error {
+            color: red
+        }
+
+        /* GRID */
+        #wrapper {
+            height: 100%;
+        }
+
+        #main {
+            flex: 0 0 66%;
+            flex: 1;
+            padding: 0 1rem;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        #sidebar {
+            font-family: Lucida Console, Lucida Sans Typewriter, monaco, Bitstream Vera Sans Mono, monospace;
+            flex: 0 0 33%;
+            background-color: #000;
+            color: rgb(199, 199, 199);
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        @media only screen and (min-width: 640px) {
+            #wrapper {
+                display: flex;
+            }
+        }
+
+        #logger-header {
+            display: block;
+            margin: 1rem 1rem 0 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed
+        }
+    </style>
+</head>
+
+<body>
+    <!-- promises: https://developers.google.com/web/fundamentals/primers/promises -->
+    <div id="wrapper">
+        <div id="main">
+            <h1>Promises exercise</h1>
+            <p>Reload page to see new response, historical list of response times (below), and a logger (right).</p>
+            <pre><code id="response"></code></pre>
+            <p>Received JSON in <span class="data"><span id="timestamp"></span> ms.</span></p>
+            <p>Past times (ms): <span class="data"><span id="runningTotal"></span></span></p>
+            <button id="clearSessionStorage">Clear timestamps</button>
+            <p>Average of <span id="runningTotalLength"></span> times: <span class="data"><span id="avgTimestamps"
+                        class=""></span></span></p>
+            <hr>
+            <small>Using <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener noreferrer">JSONPlaceholder</a>
+                for data.</small>
+        </div>
+        <div id="sidebar">
+            <span id="logger-header">Logger:</span>
+        </div>
+    </div>
+    <script>
+        let start_time = new Date().getTime();
+        // create a new div element 
+        var newLog = document.createElement("div");
+        newLog.className = 'logItem';
+
+        const sidebar = document.getElementById('sidebar');
+
+        function generateLogItem(timestamp, msg, className = "ready") {
+            if (document.getElementsByClassName('logItem')) {
+                // create a new span element 
+                var newSpan = document.createElement("span");
+                // and give it some content
+                var newTimestamp = document.createTextNode(timestamp);
+                // create a new p element 
+                var newP = document.createElement("p");
+                newP.className = `${className}`;
+                // and give it some content
+                var newContent = document.createTextNode(msg);
+                // add the text node to the newly created p
+                newSpan.appendChild(newTimestamp);
+                newLog.appendChild(newSpan);
+                newP.appendChild(newContent);
+                newLog.appendChild(newP);
+                sidebar.appendChild(newLog);
+            }
+        }
+
+        function ToLocalDate(theTimeIs) {
+            var hours = theTimeIs.getHours();
+            var minutes = ('0' + theTimeIs.getMinutes()).slice(-2);
+            var seconds = ('0' + theTimeIs.getSeconds()).slice(-2);
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function get(url) {
+            // Return a new promise.
+            return new Promise(function (resolve, reject) {
+                // Do the usual XHR stuff
+                const httpReq = new XMLHttpRequest();
+
+                httpReq.open("GET", url);
+                generateLogItem(ToLocalDate(new Date()), `GET method initialized.`);
+
+                httpReq.onload = function () {
+                    // This is called even on 404 etc
+                    // so check the status
+                    if (httpReq.status == 200) {
+                        generateLogItem(ToLocalDate(new Date()), `Status: ${httpReq.status} `);
+
+                        // Resolve the promise with the response text
+                        resolve(httpReq.response);
+                        generateLogItem(ToLocalDate(new Date()), `Response is ready!`);
+
+                        document.getElementById('response').textContent = httpReq.response;
+
+                        let rec_time = new Date().getTime();
+                        let timeDiff = rec_time - start_time;
+                        document.getElementById('timestamp').textContent = timeDiff;
+                        const runningTotal = document.getElementById('runningTotal');
+                        runningTotal.textContent = JSON.parse(sessionStorage.getItem("list_time_stamps"));
+
+                        if (!sessionStorage.getItem("list_time_stamps")) {
+                            generateLogItem(ToLocalDate(new Date()), `sessionStorage is empty.Creating array.`);
+                            let pastTimeStamp = [];
+                            pastTimeStamp.push(timeDiff);
+                            sessionStorage.setItem("list_time_stamps", JSON.stringify(pastTimeStamp));
+                            runningTotal;
+                            generateLogItem(ToLocalDate(new Date()), `Timestamp ${timeDiff} added to sessionStorage.`);
+                        } else {
+                            let runningTotal = sessionStorage.getItem("list_time_stamps");
+                            pastTimeStamp = JSON.parse(runningTotal);
+                            pastTimeStamp.push(timeDiff);
+                            sessionStorage.setItem("list_time_stamps", JSON.stringify(pastTimeStamp));
+                            runningTotal;
+                            generateLogItem(ToLocalDate(new Date()), `Timestamp "${timeDiff}" added to sessionStorage.`);
+                        }
+                        // find average of timestamps
+                        let sum = 0;
+                        let elmt = JSON.parse(sessionStorage.getItem("list_time_stamps"))
+                        for (let i = 0; i < elmt.length; i++) {
+                            sum += parseInt(elmt[i], 10); //don't forget to add the base
+                        }
+
+                        let avg = sum / elmt.length,
+                            savedAvg;
+                        generateLogItem(ToLocalDate(new Date()), `Calculated average using ${sum} ms / ${elmt.length} timestamps.`);
+
+                        document.getElementById('avgTimestamps').textContent = avg.toFixed(0) + " ms";
+                        document.getElementById('runningTotalLength').textContent = JSON.parse(sessionStorage.getItem("list_time_stamps")).length;
+
+                        savedAvg = parseInt(sessionStorage.getItem('avg_timestamp'));
+                        let el = document.getElementById('avgTimestamps');
+                        let savePreviousAvg = sessionStorage.setItem('avg_timestamp', avg.toFixed(0));
+                        if (savedAvg < avg.toFixed(0)) {
+                            el.className = 'red';
+                            savePreviousAvg;
+                            generateLogItem(ToLocalDate(new Date()), `Average declined by ${savedAvg - avg.toFixed(0)} ms`, 'error');
+                        }
+                        else if (savedAvg > avg.toFixed(0)) {
+                            el.className = 'green';
+                            savePreviousAvg;
+                            generateLogItem(ToLocalDate(new Date()), `Average improved by ${savedAvg - avg.toFixed(0)} ms`);
+                        } else {
+                            el.className = 'gray';
+                            savePreviousAvg;
+                            generateLogItem(ToLocalDate(new Date()), `Average remained the same.`);
+                        }
+                    }
+                    else {
+                        // Otherwise reject with the status text
+                        // which will hopefully be a meaningful error
+                        reject(Error(httpReq.statusText));
+                    }
+                };
+
+                // Handle network errors
+                httpReq.onerror = function () {
+                    reject(Error("Network Error"));
+                };
+
+                // Make the request
+                httpReq.send();
+            });
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+        const url = 'https://jsonplaceholder.typicode.com/todos/' + getRandomInt(50);
+
+        get(url).then(function (response) {
+            console.log("Success!", response);
+        }, function (error) {
+            generateLogItem(ToLocalDate(new Date()), `Failed! ${error} 🤔 Try reloading.`, "error");
+        })
+
+        document.getElementById('clearSessionStorage').addEventListener('click', function () {
+            sessionStorage.clear();
+            runningTotal.textContent = "";
+            generateLogItem(ToLocalDate(new Date()), `Cleared sessionStorage.`);
+        })
+    </script>
+</body>
+
+</html>
